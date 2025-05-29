@@ -41,8 +41,8 @@ let phoneNumber = "30261909";
     "https://online.mobilparkering.dk/12cdf204-d969-469a-9bd5-c1f1fc59ee34/receipt"
   );
 
-  // Optional: take screenshot for debugging
-  await page.screenshot({ path: "filled-form.png" });
+  // Take screenshot for debugging
+  //await page.screenshot({ path: "filled-form.png" });
 
   console.log("Parking sucessfully registered for", licensePlate);
 
