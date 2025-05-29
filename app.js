@@ -1,19 +1,30 @@
 import { chromium } from "playwright";
+import fs from "fs/promises";
 
-let licensePlate = "DN67058";
-let phoneNumber = "30261909";
+async function registerAll() {
+  try {
+    const data = await fs.readFile("database.json", "utf-8");
+    const vehicles = JSON.parse(data).vehicles;
+    console.log(vehicles);
 
-(async () => {
+    vehicles.forEach((vehicle) => {
+      registerVehicle(vehicle.license, vehicle.phone);
+    });
+  } catch (err) {
+    console.log("error with pulling vihecles", err);
+  }
+}
+
+async function registerVehicle(license, phoneNumber) {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  // Replace with the actual URL of the APCOA guest parking page
   await page.goto(
     "https://online.mobilparkering.dk/12cdf204-d969-469a-9bd5-c1f1fc59ee34"
   );
 
   // Fill in the license plate
-  await page.fill("#inline-full-name", licensePlate);
+  await page.fill("#inline-full-name", license);
 
   // Fill in the phone number (optional)
   await page.fill(
@@ -44,7 +55,9 @@ let phoneNumber = "30261909";
   // Take screenshot for debugging
   //await page.screenshot({ path: "filled-form.png" });
 
-  console.log("Parking sucessfully registered for", licensePlate);
+  console.log("Parking sucessfully registered for", license);
 
   await browser.close();
-})();
+}
+
+registerAll();
