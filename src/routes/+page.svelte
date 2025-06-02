@@ -26,23 +26,25 @@
 	</div>
 </section>
 
-<section class="mt-30">
-	<div class="flex flex-col items-center">
-		<div class="rounded-xl border-1 border-gray-200 p-10 shadow-lg">
-			<form action="register">
-				<!-- Info om bruger (navn, email, adresse og kodeord)-->
-				{#if formpage === 0}
-					<Generalinfo />
-				{/if}
-				<!-- Registering af bil -->
-				{#if formpage === 1}
-					<Vehicleinfo />
-				{/if}
-				<!-- Betaling -->
-				{#if formpage === 2}
-					<Payment />
-				{/if}
-				<!-- Buttons -->
+<section class="mt-30 h-full">
+	<div class="flex h-full flex-col items-center">
+		<div class="min-h-115 min-w-200 rounded-xl border-1 border-gray-200 p-10 shadow-lg">
+			<form class="" action="register">
+				<div class="min-h-80">
+					<!-- Info om bruger (navn, email, adresse og kodeord)-->
+					{#if formpage === 0}
+						<Generalinfo />
+					{/if}
+					<!-- Registering af bil -->
+					{#if formpage === 1}
+						<Vehicleinfo />
+					{/if}
+					<!-- Betaling -->
+					{#if formpage === 2}
+						<Payment />
+					{/if}
+					<!-- Buttons -->
+				</div>
 				<div class="mr-5 flex justify-end gap-5">
 					{#if formpage > 0}
 						<button
