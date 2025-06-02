@@ -1,11 +1,25 @@
 <script>
+	// Import components
 	import Navbar from '$lib/components/navbar.svelte';
 	import Generalinfo from '$lib/components/generalinfo.svelte';
 	import Vehicleinfo from '$lib/components/vehicleinfo.svelte';
 	import Payment from '$lib/components/payment.svelte';
 
-	let formpage = $state(0);
+	// Import function
+	import { validateGeneralInfo } from '$lib/scripts/formvalidation';
 
+	// General info
+	let name = $state();
+	let phone = $state();
+	let email = $state();
+	let password = $state();
+	let address = $state();
+	let generalInfoErrors = $state();
+
+	// Vehicle info
+
+	// Form navigation
+	let formpage = $state(0);
 	function nextForm() {
 		if (formpage < 2) {
 			formpage += 1;
@@ -15,6 +29,22 @@
 		if (formpage > 0) {
 			formpage -= 1;
 		}
+	}
+
+	// Input validation
+	async function checkGeneralInfo() {
+		await validateGeneralInfo(name, phone, email, password, address)
+			.then((errors) => {
+				if (errors && Object.values(errors).some((error) => error)) {
+					generalInfoErrors = errors;
+					throw errors;
+				} else {
+					nextForm();
+				}
+			})
+			.catch((err) => {
+				console.log('error in validatig general info', err);
+			});
 	}
 </script>
 
@@ -33,7 +63,14 @@
 				<div class="min-h-80">
 					<!-- Info om bruger (navn, email, adresse og kodeord)-->
 					{#if formpage === 0}
-						<Generalinfo />
+						<Generalinfo
+							bind:name
+							bind:phone
+							bind:email
+							bind:password
+							bind:address
+							errors={generalInfoErrors}
+						/>
 					{/if}
 					<!-- Registering af bil -->
 					{#if formpage === 1}
@@ -61,7 +98,7 @@
 						<button
 							type="button"
 							onclick={() => {
-								nextForm();
+								checkGeneralInfo();
 							}}
 							id="form-prev-btn"
 							class="box-border rounded px-5 py-2 font-sans tracking-wide text-blue-600 outline-1 outline-blue-600 hover:text-blue-700 hover:outline-2 hover:outline-blue-700
